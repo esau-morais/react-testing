@@ -1,13 +1,19 @@
 # React Testing
 
-![React Testing]()
+![React Testing](https://blog.rocketseat.com.br/content/images/2020/08/introducao-a-testing-library-testando-componentes-react.png)
 
 _Course material for testing React components using react-testing-library, by Kent C. Dodds_
 
 ## Folder structure
 
 ```
-
+react-testing
+└───src
+    └─── __tests__
+│   │   │ 
+│   │   │ (test files)
+│   │
+│   │ (component files)
 ```
 
 ## Test files

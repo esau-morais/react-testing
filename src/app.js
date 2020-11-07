@@ -1,12 +1,12 @@
-import * as React from 'react'
+import { createContext, useState, useReducer, useContext } from 'react';
 import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom'
 import {submitForm} from './api'
 
-const MultiPageForm = React.createContext()
+const MultiPageForm = createContext()
 
 function MultiPageFormProvider({initialValues = {}, ...props}) {
-  const [initState] = React.useState(initialValues)
-  const [form, setFormValues] = React.useReducer(
+  const [initState] = useState(initialValues)
+  const [form, setFormValues] = useReducer(
     (s, a) => ({...s, ...a}),
     initState,
   )
@@ -20,7 +20,7 @@ function MultiPageFormProvider({initialValues = {}, ...props}) {
 }
 
 function useMultiPageForm() {
-  const context = React.useContext(MultiPageForm)
+  const context = useContext(MultiPageForm)
   if (!context) {
     throw new Error(
       'useMultiPageForm must be used within a MiltiPageFormProvider',

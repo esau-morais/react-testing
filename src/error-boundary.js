@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { Component } from 'react';
 import {reportError} from './api'
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
   state = {hasError: false}
   componentDidCatch(error, info) {
     this.setState({hasError: true})

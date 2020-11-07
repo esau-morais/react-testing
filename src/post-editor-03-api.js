@@ -1,8 +1,8 @@
-import * as React from 'react'
+import { useState } from 'react';
 import {savePost} from './api'
 
 function Editor({user}) {
-  const [isSaving, setIsSaving] = React.useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   function handleSubmit(e) {
     e.preventDefault()
     const {title, content, tags} = e.target.elements

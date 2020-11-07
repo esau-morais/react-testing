@@ -1,43 +1,45 @@
-import * as React from 'react'
-import {BrowserRouter} from 'react-router-dom'
-import {render as rtlRender, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+
+import {Router} from 'react-router-dom'
+import {createMemoryHistory} from 'history'
+import {render as rtlRender, fireEvent} from 'react-testing-library'
 import {Main} from '../main'
 
 // normally you'd put this logic in your test utility file so it can be used
 // for all of your tests.
-function render(ui, {route = '/', ...renderOptions} = {}) {
-  // we'll set our route properly here
-  window.history.pushState({}, 'Test page', route)
-
-  function Wrapper({children}) {
-    // originally this rendered a Router with a memory history
-    // but using the actual BrowserRouter is more correct and
-    // is actually easier anyway.
-    return <BrowserRouter>{children}</BrowserRouter>
-  }
+function render(
+  ui,
+  {
+    route = '/',
+    history = createMemoryHistory({initialEntries: [route]}),
+    ...renderOptions
+  } = {},
+) {
   return {
-    ...rtlRender(ui, {
-      wrapper: Wrapper,
-      ...renderOptions,
-      // originally this exposed history, but that's really
-      // an implementation detail, so we don't recommend that anymore
-    }),
+    ...rtlRender(<Router history={history}>{ui}</Router>, renderOptions),
+    // adding `history` to the returned utilities to allow us
+    // to reference it in our tests (just try to avoid using
+    // this to test implementation details).
+    history,
   }
 }
 
 test('main renders about and home and I can navigate to those pages', () => {
-  render(<Main />)
-  expect(screen.getByRole('heading')).toHaveTextContent(/home/i)
-  userEvent.click(screen.getByText(/about/i))
-  expect(screen.getByRole('heading')).toHaveTextContent(/about/i)
+  const {getByTestId, queryByTestId, getByText} = render(<Main />)
+  expect(getByTestId('home-screen')).toBeInTheDocument()
+  expect(queryByTestId('about-screen')).not.toBeInTheDocument()
+  fireEvent.click(getByText(/about/i))
+  expect(queryByTestId('home-screen')).not.toBeInTheDocument()
+  expect(getByTestId('about-screen')).toBeInTheDocument()
   // you can use the `within` function to get queries for elements within the
   // about screen
 })
 
 test('landing on a bad page shows no match component', () => {
-  render(<Main />, {
+  const {getByTestId} = render(<Main />, {
     route: '/something-that-does-not-match',
   })
-  expect(screen.getByRole('heading')).toHaveTextContent(/404/i)
+  expect(getByTestId('no-match-screen')).toBeInTheDocument()
 })

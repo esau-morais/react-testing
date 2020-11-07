@@ -1,8 +1,8 @@
-import * as React from 'react'
+import { useState } from 'react';
 import * as api from './api'
 
 function GreetingLoader({loadGreeting = api.loadGreeting}) {
-  const [greeting, setGreeting] = React.useState('')
+  const [greeting, setGreeting] = useState('')
   async function loadGreetingForInput(e) {
     e.preventDefault()
     const {data} = await loadGreeting(e.target.elements.name.value)

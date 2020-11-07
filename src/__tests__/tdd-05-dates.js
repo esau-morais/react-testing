@@ -1,9 +1,11 @@
-import * as React from 'react'
-import {render, screen, waitFor} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+
+import {render, fireEvent, wait} from 'react-testing-library'
 import {Redirect as MockRedirect} from 'react-router'
 import {savePost as mockSavePost} from '../api'
-import {Editor} from '../post-editor-05-dates'
+import {Editor} from '../post-editor'
 
 jest.mock('react-router', () => {
   return {
@@ -11,43 +13,51 @@ jest.mock('react-router', () => {
   }
 })
 
-jest.mock('../api')
-
-afterEach(() => {
-  jest.clearAllMocks()
+jest.mock('../api', () => {
+  return {
+    savePost: jest.fn(() => Promise.resolve()),
+  }
 })
 
-test('renders a form with title, content, tags, and a submit button', async () => {
-  mockSavePost.mockResolvedValueOnce()
+afterEach(() => {
+  MockRedirect.mockClear()
+  mockSavePost.mockClear()
+})
+
+// 🐨 unskip this test
+test.skip('renders a form with title, content, tags, and a submit button', async () => {
   const fakeUser = {id: 'user-1'}
-  render(<Editor user={fakeUser} />)
+  const {getByLabelText, getByText} = render(<Editor user={fakeUser} />)
   const fakePost = {
     title: 'Test Title',
     content: 'Test content',
     tags: ['tag1', 'tag2'],
   }
-  const preDate = new Date().getTime()
+  // 🐨 save the current date here (use Date.now())
+  getByLabelText(/title/i).value = fakePost.title
+  getByLabelText(/content/i).value = fakePost.content
+  getByLabelText(/tags/i).value = fakePost.tags.join(', ')
+  const submitButton = getByText(/submit/i)
 
-  screen.getByLabelText(/title/i).value = fakePost.title
-  screen.getByLabelText(/content/i).value = fakePost.content
-  screen.getByLabelText(/tags/i).value = fakePost.tags.join(', ')
-  const submitButton = screen.getByText(/submit/i)
-
-  userEvent.click(submitButton)
+  fireEvent.click(submitButton)
 
   expect(submitButton).toBeDisabled()
 
+  expect(mockSavePost).toHaveBeenCalledTimes(1)
   expect(mockSavePost).toHaveBeenCalledWith({
     ...fakePost,
-    date: expect.any(String),
+    // 🐨 verify that this also as a `date` property that is a string (expect.any(String))
     authorId: fakeUser.id,
   })
-  expect(mockSavePost).toHaveBeenCalledTimes(1)
 
-  const postDate = new Date().getTime()
-  const date = new Date(mockSavePost.mock.calls[0][0].date).getTime()
-  expect(date).toBeGreaterThanOrEqual(preDate)
-  expect(date).toBeLessThanOrEqual(postDate)
+  // 🐨 get the current date now (Date.now())
+  // 🐨 verify that the date mockSavePost was called with is less than the
+  // preDate and greater than the postDate
+  // 💯 get the date mockSavePost was called with via:
+  //   new Date(mockSavePost.mock.calls[0][0].date).getTime()
+  // use toBeGreaterThanOrEqual and toBeLessThanOrEqual
 
-  await waitFor(() => expect(MockRedirect).toHaveBeenCalledWith({to: '/'}, {}))
+  await wait(() => expect(MockRedirect).toHaveBeenCalledTimes(1))
+
+  expect(MockRedirect).toHaveBeenCalledWith({to: '/'}, {})
 })

@@ -1,9 +1,9 @@
-import * as React from 'react'
+import { useState, useRef, useEffect } from 'react';
 
 function Countdown() {
-  const [remainingTime, setRemainingTime] = React.useState(10000)
-  const end = React.useRef(new Date().getTime() + remainingTime)
-  React.useEffect(() => {
+  const [remainingTime, setRemainingTime] = useState(10000)
+  const end = useRef(new Date().getTime() + remainingTime)
+  useEffect(() => {
     const interval = setInterval(() => {
       const newRemainingTime = end.current - new Date().getTime()
       if (newRemainingTime <= 0) {

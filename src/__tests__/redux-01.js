@@ -1,16 +1,19 @@
-import * as React from 'react'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+
+import {createStore} from 'redux'
 import {Provider} from 'react-redux'
-import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import {Counter} from '../redux-counter'
-import {store} from '../redux-store'
+import {render, fireEvent} from 'react-testing-library'
+import {reducer, ConnectedCounter} from '../redux-app'
 
 test('can render with redux with defaults', () => {
-  render(
+  const store = createStore(reducer)
+  const {getByTestId, getByText} = render(
     <Provider store={store}>
-      <Counter />
+      <ConnectedCounter />
     </Provider>,
   )
-  userEvent.click(screen.getByText('+'))
-  expect(screen.getByLabelText(/count/i)).toHaveTextContent('1')
+  fireEvent.click(getByText('+'))
+  expect(getByTestId('count-value')).toHaveTextContent('1')
 })

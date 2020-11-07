@@ -1,22 +1,16 @@
-import * as React from 'react'
-import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import {Editor} from '../post-editor-02-state'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
 
-test('renders a form with title, content, tags, and a submit button', () => {
-  render(<Editor />)
-  screen.getByLabelText(/title/i)
-  screen.getByLabelText(/content/i)
-  screen.getByLabelText(/tags/i)
-  const submitButton = screen.getByText(/submit/i)
+import {render} from 'react-testing-library'
+import {Editor} from '../post-editor'
 
-  userEvent.click(submitButton)
-
-  expect(submitButton).toBeDisabled()
+test.skip('renders a form with title, content, tags, and a submit button', () => {
+  const {getByLabelText, getByText} = render(<Editor />)
+  getByLabelText(/title/i)
+  getByLabelText(/content/i)
+  getByLabelText(/tags/i)
+  getByText(/submit/i)
+  // 🐨 click the submit button
+  // 🐨 verify that the submit button is disabled when clicked
 })
-
-// disabling this rule for now. We'll get to this later
-/*
-eslint
-  testing-library/prefer-explicit-assert: "off",
-*/

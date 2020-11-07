@@ -1,45 +1,53 @@
-import * as React from 'react'
-import {render, screen, waitFor} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import {Redirect as MockRedirect} from 'react-router'
-import {savePost as mockSavePost} from '../api'
-import {Editor} from '../post-editor-04-router-redirect'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
 
-jest.mock('react-router', () => {
+// 🐨 you'll need to also import wait from 'react-testing-library' here
+import {render, fireEvent} from 'react-testing-library'
+// 🐨 import your mocked version of the Redirect component
+import {savePost as mockSavePost} from '../api'
+import {Editor} from '../post-editor'
+
+// 🐨 you'll need to mock react-router's Redirect component here
+
+jest.mock('../api', () => {
   return {
-    Redirect: jest.fn(() => null),
+    savePost: jest.fn(() => Promise.resolve()),
   }
 })
 
-jest.mock('../api')
-
 afterEach(() => {
-  jest.clearAllMocks()
+  // 🐨 clear the Redirect mock here
+  mockSavePost.mockClear()
 })
 
-test('renders a form with title, content, tags, and a submit button', async () => {
-  mockSavePost.mockResolvedValueOnce()
+// 🐨 unskip this test
+// 🐨 you'll need to make this an async test
+test.skip('renders a form with title, content, tags, and a submit button', () => {
   const fakeUser = {id: 'user-1'}
-  render(<Editor user={fakeUser} />)
+  const {getByLabelText, getByText} = render(<Editor user={fakeUser} />)
   const fakePost = {
     title: 'Test Title',
     content: 'Test content',
     tags: ['tag1', 'tag2'],
   }
-  screen.getByLabelText(/title/i).value = fakePost.title
-  screen.getByLabelText(/content/i).value = fakePost.content
-  screen.getByLabelText(/tags/i).value = fakePost.tags.join(', ')
-  const submitButton = screen.getByText(/submit/i)
+  getByLabelText(/title/i).value = fakePost.title
+  getByLabelText(/content/i).value = fakePost.content
+  getByLabelText(/tags/i).value = fakePost.tags.join(', ')
+  const submitButton = getByText(/submit/i)
 
-  userEvent.click(submitButton)
+  fireEvent.click(submitButton)
 
   expect(submitButton).toBeDisabled()
 
+  expect(mockSavePost).toHaveBeenCalledTimes(1)
   expect(mockSavePost).toHaveBeenCalledWith({
     ...fakePost,
     authorId: fakeUser.id,
   })
-  expect(mockSavePost).toHaveBeenCalledTimes(1)
 
-  await waitFor(() => expect(MockRedirect).toHaveBeenCalledWith({to: '/'}, {}))
+  // 🐨 wait until your mock Redirect component has been called once
+  // 🐨 ensure that your mock Redirect component was called with the props: {to: '/'}
+  // 💯 react function components are called with 2 arguments: props and context
+  // context in this case is an empty object.
 })

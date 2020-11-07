@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useRef, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom'
 
 let modalRoot = document.getElementById('modal-root')
@@ -12,8 +12,8 @@ if (!modalRoot) {
 // you need to think about accessibility and styling.
 // Look into: https://ui.reach.tech/dialog
 function Modal({children}) {
-  const el = React.useRef(document.createElement('div'))
-  React.useLayoutEffect(() => {
+  const el = useRef(document.createElement('div'))
+  useLayoutEffect(() => {
     const currentEl = el.current
     modalRoot.appendChild(currentEl)
     return () => modalRoot.removeChild(currentEl)

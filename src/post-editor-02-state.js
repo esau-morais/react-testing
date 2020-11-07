@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { useState } from 'react';
 
 function Editor() {
-  const [isSaving, setIsSaving] = React.useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   function handleSubmit(e) {
     e.preventDefault()
     setIsSaving(true)

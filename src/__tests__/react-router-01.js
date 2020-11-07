@@ -1,17 +1,22 @@
-import * as React from 'react'
-import {BrowserRouter} from 'react-router-dom'
-import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+
+import {Router} from 'react-router-dom'
+import {createMemoryHistory} from 'history'
+import {render, fireEvent} from 'react-testing-library'
 import {Main} from '../main'
 
 test('main renders about and home and I can navigate to those pages', () => {
-  window.history.pushState({}, 'Test page', '/')
-  render(
-    <BrowserRouter>
+  const history = createMemoryHistory({initialEntries: ['/']})
+  const {getByTestId, queryByTestId, getByText} = render(
+    <Router history={history}>
       <Main />
-    </BrowserRouter>,
+    </Router>,
   )
-  expect(screen.getByRole('heading')).toHaveTextContent(/home/i)
-  userEvent.click(screen.getByText(/about/i))
-  expect(screen.getByRole('heading')).toHaveTextContent(/about/i)
+  expect(getByTestId('home-screen')).toBeInTheDocument()
+  expect(queryByTestId('about-screen')).not.toBeInTheDocument()
+  fireEvent.click(getByText(/about/i))
+  expect(queryByTestId('home-screen')).not.toBeInTheDocument()
+  expect(getByTestId('about-screen')).toBeInTheDocument()
 })

@@ -1,11 +1,11 @@
-import * as React from 'react'
+import { useState } from 'react';
 import {Redirect} from 'react-router'
 import {savePost} from './api'
 
 function Editor({user}) {
-  const [isSaving, setIsSaving] = React.useState(false)
-  const [redirect, setRedirect] = React.useState(false)
-  const [error, setError] = React.useState(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [redirect, setRedirect] = useState(false)
+  const [error, setError] = useState(null)
   function handleSubmit(e) {
     e.preventDefault()
     const {title, content, tags} = e.target.elements

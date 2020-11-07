@@ -1,17 +1,14 @@
-import * as React from 'react'
-import {render, screen} from '@testing-library/react'
-import {Editor} from '../post-editor-01-markup'
+// these should normally be in your jest setupTestFrameworkScriptFile
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+
+// 🐨 you're gonna need these
+// import React from 'react'
+// import {render} from 'react-testing-library'
+// import {Editor} from '../post-editor'
 
 test('renders a form with title, content, tags, and a submit button', () => {
-  render(<Editor />)
-  screen.getByLabelText(/title/i)
-  screen.getByLabelText(/content/i)
-  screen.getByLabelText(/tags/i)
-  screen.getByText(/submit/i)
+  // 🐨 render the editor
+  // 🐨 verify that you can get the title, content, and tags by their label text
+  // 🐨 verify that you can get the submit button by its label text
 })
-
-// disabling this rule for now. We'll get to this later
-/*
-eslint
-  testing-library/prefer-explicit-assert: "off",
-*/

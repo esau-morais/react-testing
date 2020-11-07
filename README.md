@@ -1,26 +1,16 @@
-<h1 align="center">
-  <a href="https://testingjavascript.com/courses/test-react-components-with-jest-and-react-testing-library-0bbe87">Test React Components with Jest and React Testing Library</a>
-</h1>
+# React Testing
 
-<div align="center">
-  <h2><a href="https://testingjavascript.com">TestingJavaScript.com</a></h2>
-  <a href="https://testingjavascript.com">
-    <img
-      width="500"
-      alt="Learn the smart, efficient way to test any JavaScript application."
-      src="https://kentcdodds.com/images/testingjavascript-promo/tjs-4.jpg"
-    />
-  </a>
-</div>
+![React Testing]()
 
-<hr />
+_Course material for testing React components using react-testing-library, by Kent C. Dodds_
 
-_Course material for testing React components using react-testing-library_
+## Folder structure
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+```
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+```
+
+## Test files
 
 - `react-dom.js` - Render a React component for testing
 - `jest-dom.js` - Use jest-dom for improved assertions
@@ -52,6 +42,42 @@ _Course material for testing React components using react-testing-library_
 - `unmounting.js` - Test Unmounting a React Component with react-testing-library
 - `app.js` - Testing the full application.
 
-> Note: the setup for this project uses kcd-scripts. Don't worry about that. You
-> can learn about how to configure jest properly in the "Configure Jest for
-> Testing JavaScript Applications" module of TestingJavaScript.com
+## How do I start?
+
+1. Fork this project
+
+![Forking the project](https://camo.githubusercontent.com/6f03010c651d060f8b7cfc17da7098c1757c4ead/68747470733a2f2f6669727374636f6e747269627574696f6e732e6769746875622e696f2f6173736574732f526561646d652f666f726b2e706e67)
+
+2. Clone the forked repository
+
+    `git clone https://github.com/user/react-testing` (if you use `git`)
+
+    or
+
+    `gh repo clone https://github.com/user/react-testing` (if you use `gh` cli)
+
+3. Install the dependencies
+
+    `npm install` (if you use `npm`)
+
+    or
+
+    `yarn` (if you use   `yarn`)
+
+4. Start the project
+
+    `npm start` (if you `npm`)
+
+    or
+
+    `yarn start` (if you use `yarn`)
+
+## How to contribute?
+
+See the [CONTRIBUTING.md](./CONTRIBUTING.md) file to see the step about how to contribute.
+
+---
+
+[LICENSE](./LICENSE)
+
+_Credits: Kent C. Dodds_

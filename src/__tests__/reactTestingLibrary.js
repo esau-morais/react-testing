@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 // 🐨 you'll need to import the render function from '@testing-library/react'
 import { render } from '@testing-library/react';
 import { FavoriteNumber } from '../favoriteNumber';

@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 import ReactDOM from 'react-dom';
 // 🐨 you'll need the getQueriesForElement function from 'dom-testing-library'
 // you can also use within

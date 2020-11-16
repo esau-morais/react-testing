@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 import ReactDOM from 'react-dom';
 import { FavoriteNumber } from '../favoriteNumber';
 

@@ -1,11 +1,6 @@
-// these should normally be in your jest setupTestFrameworkScriptFile
-import 'jest-dom/extend-expect'
-import 'react-testing-library/cleanup-after-each'
-
 // 0⃣ 🐨 you'll need these:
-// import React from 'react'
-// import {render, fireEvent} from 'react-testing-library'
-// import {HiddenMessage} from '../hidden-message'
+import { render, fireEvent } from '@testing-library/react';
+import { HiddenMessage } from '../hiddenMessage';
 
 // Our component uses a react animation library called react-transition-group.
 // By its nature, this library does some interesting things to keep an element
@@ -18,27 +13,33 @@ import 'react-testing-library/cleanup-after-each'
 // `CSSTransition` component from the react-transition-group module. So in
 // our mock module factory function that's all we need to return
 // 7⃣ 🐨 use jest.mock to mock out the react-transition-group component
-// 💯 jest.mock('react-transition-group', () => { /* return the mock object */ })
+jest.mock('react-transition-group', () => {
+  return {
+    CSSTransition: props => props.in ? props.children : null
+  }
+})
 // 📖 https://jestjs.io/docs/en/jest-object#jestmockmodulename-factory-options
 
 test('shows hidden message when toggle is clicked', () => {
   // 1⃣ 🐨 render the HiddenMessage component with any message you want
-  //
   // 2⃣ 🐨 get the toggle button
   // 💯 (use getByText)
-  //
+  const myMsg = 'Hello, world!';
+  const { getByText, queryByText, container } = render(<HiddenMessage>{myMsg}</HiddenMessage>);
+  const toggleBtn = getByText("Toggle"); // or /toggle/i
   // 3⃣ 🐨 assert that the text you want to render is not in the document
   // 💯 (use `queryByText` and `not.toBeInTheDocument`)
   // 📖 https://github.com/gnapse/jest-dom#tobeinthedocument
-  //
+  expect(queryByText(myMsg)).not.toBeInTheDocument();
   // 4⃣ 🐨 Use `fireEvent` to click on the button:
   // 📖 https://github.com/kentcdodds/react-testing-library/blob/b18ff5b96210a887e784b9f53bd886e11b6ed5e0/README.md#fireeventnode-htmlelement-event-event
-  //
+  fireEvent.click(toggleBtn);
   // 5⃣ 🐨 assert that your message is in the docuemnt
-  //
+  expect(queryByText(myMsg)).toBeInTheDocument();
   // 6⃣ 🐨 click on the button again
-  //
-  // 8⃣ 🐨 assert that your message is not in the docuemnt anymore
+  fireEvent.click(toggleBtn);
+  // 8⃣ 🐨 assert that your message is not in the document anymore
+  expect(queryByText(myMsg)).not.toBeInTheDocument();
 })
 
 //////// Elaboration & Feedback /////////
@@ -51,7 +52,7 @@ test('shows hidden message when toggle is clicked', () => {
 http://ws.kcd.im/?ws=react-testing-library-course&e=mock-component&em=esaumorais7@gmail.com
 */
 test.skip('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
+  const submitted = true // change this when you've submitted!
   expect(submitted).toBe(true)
 })
 ////////////////////////////////

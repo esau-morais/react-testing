@@ -1,16 +1,19 @@
-// these should normally be in your jest setupTestFrameworkScriptFile
-import 'jest-dom/extend-expect'
-import 'react-testing-library/cleanup-after-each'
-
 // 0⃣ 🐨 you'll need these
-// import React from 'react'
-// import {render} from 'react-testing-library'
-// import {Modal} from '../modal'
+import { render, within } from '@testing-library/react';
+import { Modal } from '../modal';
 
 test('modal shows the children', () => {
   // 1⃣ 🐨 render the modal with anything you want as the children
+  render(
+    <Modal>
+      <h1>Hello, world!</h1>
+    </Modal>
+  )
   // 2⃣ 🐨 add an assertion that what you want is in the document.
-  // seriously... that's it...
+  const modalEl = document.getElementById('modal-root');
+  const { getByText } = within(modalEl);
+  expect(getByText('Hello, world!')).toBeInTheDocument();
+  // debug();
 })
 
 //////// Elaboration & Feedback /////////
@@ -23,7 +26,7 @@ test('modal shows the children', () => {
 http://ws.kcd.im/?ws=react-testing-library-course&e=portals&em=esaumorais7@gmail.com
 */
 test.skip('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
+  const submitted = true // change this when you've submitted!
   expect(submitted).toBe(true)
 })
 ////////////////////////////////

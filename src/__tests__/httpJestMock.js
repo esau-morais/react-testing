@@ -1,33 +1,37 @@
-// these should normally be in your jest setupTestFrameworkScriptFile
-import 'jest-dom/extend-expect'
-import 'react-testing-library/cleanup-after-each'
-
 // 0⃣ 🐨 you're going to need these
-// import React from 'react'
-// import {render, fireEvent, wait} from 'react-testing-library'
-// import {loadGreeting as mockLoadGreeting} from '../api'
-// import {GreetingLoader} from '../greeting-loader-01-mocking'
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { loadGreeting as mockLoadGreeting } from '../api';
+import { GreetingLoader } from '../greetingLoader01Mocking';
 
 // our component makes an HTTP request when you click on the load button.
 // we don't want it to do this for various reasons, so instead we'll mock
 // the module responsible for making that HTTP call to have it return
 // a fake version of what we want it to return.
-// 4⃣ 🐨 use jest.mock to mock the '../api' module and return a fake `loadGreeting`:
-// 💯 jest.fn(subject => Promise.resolve({data: {greeting: `Hi ${subject}`}})
+// 4⃣ 🐨 use jest.mock to mock the '../api' module
+jest.mock('../api');
 
 // 👀 notice this as an async test:
 test('loads greetings on click', async () => {
+  const testGreeting = 'Hi';
   // 1⃣ 🐨 render the GreetingLoader component
-  //
+  render(<GreetingLoader />);
   // 2⃣ 🐨 set the name input's value to whatever you like
-  //
-  // 3⃣ 🐨 use fireEvent to click on the load button
-  //
+  const nameInput = screen.getByLabelText("Name"); // or /name/i
+  userEvent.type(nameInput, 'Esaú');
+  // 3⃣ 🐨 use userEvent to click on the load button
+  const loadBtn = screen.getByText("Load Greeting"); // or /loading greeting/i
+  userEvent.click(loadBtn);
   // 5⃣ 🐨 make an assertion that your mocked loadGreeting function was called once
   // and that it was called with the value you set to the name input's value.
-  //
+  expect(mockLoadGreeting).toHaveBeenCalledTimes(1);
+  expect(mockLoadGreeting).toHaveBeenCalledWith('Esaú');
   // 6⃣ 🐨 use react-testing-library's `wait` utility to wait until the `greeting`
   // node has the correct text content.
+  mockLoadGreeting.mockResolvedValueOnce({data: {greeting: testGreeting}})
+  await waitFor(() =>
+    expect(screen.getByTestId(/greeting/i).textContent).toBe(testGreeting)
+  )
   // 📖 https://github.com/kentcdodds/react-testing-library/blob/b18ff5b96210a887e784b9f53bd886e11b6ed5e0/README.md#wait
 })
 

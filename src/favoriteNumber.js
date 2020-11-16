@@ -10,9 +10,9 @@ function FavoriteNumber({min = 1, max = 9}) {
   const isValid = !numberEntered || (number >= min && number <= max)
   return (
     <div>
-      <label>
+      {/*<label>
         Remember me <input type="checkbox" />
-      </label>
+      </label>*/}
       <label htmlFor="favorite-number">Favorite Number</label>
       <input
         id="favorite-number"
@@ -20,7 +20,12 @@ function FavoriteNumber({min = 1, max = 9}) {
         value={number}
         onChange={handleChange}
       />
-      {isValid ? null : <div role="alert">The number is invalid</div>}
+      {isValid
+        ? null
+        : <div role="alert" data-testid="error-message">
+            The number is invalid
+          </div>
+      }
     </div>
   )
 }
